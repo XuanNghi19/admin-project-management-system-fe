@@ -1,28 +1,25 @@
-import axios from "axios";
-import { environment } from "../environments/environments";
 import { CourseListByPageResponse, CRUDCourse } from "../types/course.types";
 import { ApiResponse } from "../types/common.types";
-
-const courseUrl = `${environment.apiUrl}/course_management`;
+import apiClient from "../utils/axios";
 
 export const addCourse = async (
   requests: CRUDCourse[]
 ): Promise<ApiResponse<boolean | string>> => {
-  const res = await axios.post(`${courseUrl}/add_course`, requests);
+  const res = await apiClient.post("/course_management/add_course", requests);
   return res.data;
 };
 
 export const updateCourse = async (
   request: CRUDCourse
 ): Promise<ApiResponse<boolean | string>> => {
-  const res = await axios.put(`${courseUrl}/update_course`, request);
+  const res = await apiClient.put("/course_management/update_course", request);
   return res.data;
 };
 
 export const deleteCourse = async (
   id: number
 ): Promise<ApiResponse<boolean | string>> => {
-  const res = await axios.delete(`${courseUrl}/delete_course`, {
+  const res = await apiClient.delete("/course_management/delete_course", {
     params: {
       "id course": id,
     },
@@ -37,7 +34,7 @@ export const getAllCourse = async (
   page: number,
   limit: number
 ): Promise<ApiResponse<CourseListByPageResponse | string>> => {
-  const res = await axios.get(`${courseUrl}/get_all_course`, {
+  const res = await apiClient.get("/course_management/get_all_course", {
     params: {
       name,
       start,

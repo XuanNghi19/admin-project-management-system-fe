@@ -7,27 +7,24 @@ import {
 } from "../types/user.types";
 import { useNavigate } from "react-router-dom";
 import { ApiResponse } from "../types/common.types";
-import { addStudent, getAllUser } from "../services/userManagement.service";
+import { addAdmin, getAllUser } from "../services/userManagement.service";
 import { Role } from "../types/enum.types";
 import Pagination from "../components/Pagination";
-import { CRUDMajor } from "../types/major.types";
-import { CRUDCourse } from "../types/course.types";
-import { searchCourse, searchMajor } from "../services/lookup.service";
+import { searchDepartment } from "../services/lookup.service";
+import { CRUDDepartment } from "../types/department.types";
 
-const StudentManagementPage: React.FC = () => {
+const AdminManagementPage: React.FC = () => {
   const [students, setStudents] = useState<UserResponse[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(1);
 
   // Trường tìm kiếm
-  const [majorId, setMajorId] = useState("");
-  const [courseId, setCourseId] = useState("");
-  const [majors, setMajors] = useState<CRUDMajor[]>([]);
-  const [courses, setCourses] = useState<CRUDCourse[]>([]);
+  const [departmentId, setDepartmentId] = useState("");
+  const [departments, setDepartments] = useState<CRUDDepartment[]>([]);
   const [name, setName] = useState("");
 
   const [showPopup, setShowPopup] = useState(false);
-  const [student, setStudent] = useState<CreateUserRequest>({
+  const [user, setUser] = useState<CreateUserRequest>({
     name: "",
     age: 0,
     password: "",
@@ -44,35 +41,24 @@ const StudentManagementPage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  // Hàm gọi API để lấy ngành học
-  const fetchMajors = async (name: string | null) => {
-    const res = await searchMajor(name);
+  // Hàm gọi API để lấy khoa
+  const featchDepartment = async (name: string | null) => {
+    const res = await searchDepartment(name);
     if (res.code === 200 && Array.isArray(res.result)) {
-      setMajors(res.result); // Cập nhật state ngành học
+      setDepartments(res.result); // Cập nhật state khoa
     }
   };
 
-  // Hàm gọi API để lấy khóa học
-  const fetchCourses = async (name: string | null) => {
-    const res = await searchCourse(name);
-    if (res.code === 200 && Array.isArray(res.result)) {
-      setCourses(res.result); // Cập nhật state khóa học
-    }
-  };
-
-  const fetchStudents = async (
+  const fetchUser = async (
     page: number,
-    majorId?: string,
-    courseId?: string,
+    departmentId?: string,
     name?: string
   ) => {
-    console.log(majorId);
-    console.log(courseId);
     const res: ApiResponse<UserListByPageResponse | string> = await getAllUser(
-      Role.STUDENT,
+      Role.ADMIN,
+      departmentId ? Number(departmentId) : null,
       null,
-      majorId ? Number(majorId) : null,
-      courseId ? Number(courseId) : null,
+      null,
       name || null,
       page,
       15
@@ -86,68 +72,61 @@ const StudentManagementPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchMajors(null);
-    fetchCourses(null);
-    fetchStudents(currentPage, majorId, courseId, name);
+    featchDepartment(null);
+    fetchUser(currentPage, departmentId, name);
   }, [currentPage]);
 
   const handleSearch = () => {
     setCurrentPage(0);
-    fetchStudents(0, majorId, courseId, name);
+    fetchUser(0, departmentId, name);
   };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    console.log("name: ", name);
-    console.log("value: ", value);
-    setStudent((prev) => ({
+    setUser((prev) => ({
       ...prev,
       [name]: name === "age" || name.endsWith("Id") ? Number(value) || "" : value,
     }));
 
   };
 
-  const handleAddStudent = async () => {
+  const handleAddAdmin = async () => {
     // Validate required fields
-    if (!student.name) {
-      alert("Tên sinh viên là bắt buộc!");
+    if (!user.name) {
+      alert("Tên quảng trị viên là bắt buộc!");
       return;
     }
-    if (!student.age) {
+    if (!user.age) {
       alert("Tuổi là bắt buộc!");
       return;
     }
-    if (!student.dob) {
+    if (!user.dob) {
       alert("Ngày sinh là bắt buộc!");
       return;
     }
-    if (!student.email) {
+    if (!user.email) {
       alert("Email là bắt buộc!");
       return;
     }
-    if (!student.majorId) {
-      alert("Chuyên ngành là bắt buộc!");
-      return;
-    }
-    if (!student.courseId) {
-      alert("Khóa học là bắt buộc!");
+    if (!user.departmentId) {
+      alert("Chọn Khoa là bắt buộc!");
       return;
     }
 
     try {
-      const response = await addStudent([student]);
+      const response = await addAdmin(user);
       if (response.code === 200) {
-        alert("Thêm sinh viên thành công!");
+        alert("Thêm quản trị viên thành công!");
         setShowPopup(false);
         window.location.reload();
       } else {
-        alert("Thêm sinh viên thất bại!");
+        alert("Thêm quản trị viên thất bại!");
       }
     } catch (error) {
       console.error(error);
-      alert("Lỗi khi thêm sinh viên!");
+      alert("Lỗi khi thêm quản trị viên!");
     }
   };
 
@@ -155,7 +134,7 @@ const StudentManagementPage: React.FC = () => {
     <div className="bg-gray-50 w-screen h-screen flex relative overflow-hidden">
       <Menu />
       <div className="flex-1 p-6 ml-[40px] mr-[30px] overflow-auto scrollbar-hide">
-        <h1 className="text-2xl font-semibold mb-6">Quản lý sinh viên</h1>
+        <h1 className="text-2xl font-semibold mb-6">Quản lý quản trị viên</h1>
 
         {/* Thanh tìm kiếm */}
         <div className="relative bg-white p-4 rounded-lg shadow mb-6 flex gap-4">
@@ -167,26 +146,14 @@ const StudentManagementPage: React.FC = () => {
             className="w-96 border-[0.5px] border-gray-300 rounded px-3 py-2"
           />
           <select
-            value={majorId}
-            onChange={(e) => setMajorId(e.target.value)}
+            value={departmentId}
+            onChange={(e) => setDepartmentId(e.target.value)}
             className="w-80 border-[0.5px] border-gray-300 rounded px-3 py-2"
           >
-            <option value="">Tất cả ngành học</option>
-            {majors.map((major) => (
-              <option key={major.id} value={major.id}>
-                {major.name}
-              </option>
-            ))}
-          </select>
-          <select
-            value={courseId}
-            onChange={(e) => setCourseId(e.target.value)}
-            className="w-80 border-[0.5px] border-gray-300 rounded px-3 py-2"
-          >
-            <option value="">Tất cả khóa học</option>
-            {courses.map((course) => (
-              <option key={course.id} value={course.id}>
-                {course.name}
+            <option value="">Tất cả khoa</option>
+            {departments.map((dpt) => (
+              <option key={dpt.id} value={dpt.id}>
+                {dpt.name}
               </option>
             ))}
           </select>
@@ -200,14 +167,14 @@ const StudentManagementPage: React.FC = () => {
             onClick={() => setShowPopup(true)}
             className="bg-blue-900 hover:bg-blue-950 text-white px-4 py-2 rounded w-52 absolute right-3.5"
           >
-            Thêm sinh viên
+            Thêm quản trị viên
           </button>
         </div>
 
-        {/* Bảng sinh viên */}
+        {/* Bảng người dùng */}
         <div className="max-w-full overflow-hidden bg-white border border-gray-300 rounded-lg shadow-lg">
           <div className="p-4">
-            <h2 className="text-xl font-semibold mb-4">Danh sách sinh viên</h2>
+            <h2 className="text-xl font-semibold mb-4">Danh sách quản trị viên</h2>
             <table className="min-w-full bg-white text-md">
               <thead>
                 <tr className="bg-blue-50 text-left">
@@ -216,8 +183,7 @@ const StudentManagementPage: React.FC = () => {
                   <th className="py-2 px-4">Tuổi</th>
                   <th className="py-2 px-4">Email</th>
                   <th className="py-2 px-4">Giới tính</th>
-                  <th className="py-2 px-4">Chuyên ngành</th>
-                  <th className="py-2 px-4">Khóa</th>
+                  <th className="py-2 px-4">khoa</th>
                 </tr>
               </thead>
               <tbody>
@@ -234,8 +200,7 @@ const StudentManagementPage: React.FC = () => {
                     <td className="py-2 px-4">{user.age}</td>
                     <td className="py-2 px-4">{user.email}</td>
                     <td className="py-2 px-4">{user.sex}</td>
-                    <td className="py-2 px-4">{user.major?.name}</td>
-                    <td className="py-2 px-4">{user.course?.name}</td>
+                    <td className="py-2 px-4">{user.department?.name}</td>
                   </tr>
                 ))}
               </tbody>
@@ -261,14 +226,14 @@ const StudentManagementPage: React.FC = () => {
             <div className="space-y-4">
               <input
                 name="name"
-                value={student.name}
+                value={user.name}
                 onChange={handleInputChange}
                 placeholder="Tên sinh viên"
                 className="border-gray-400 border-[1.5px] rounded-md p-2 w-full"
               />
               <input
                 name="age"
-                value={student.age != 0 ? student.age : ""}
+                value={user.age != 0 ? user.age : ""}
                 onChange={handleInputChange}
                 placeholder="Tuổi"
                 className="border-gray-400 border-[1.5px] rounded-md p-2 w-full"
@@ -276,69 +241,56 @@ const StudentManagementPage: React.FC = () => {
               <input
                 name="dob"
                 type="date"
-                value={student.dob}
+                value={user.dob}
                 onChange={handleInputChange}
                 placeholder="Ngày sinh"
                 className="border-gray-400 border-[1.5px] rounded-md p-2 w-full"
               />
               <input
                 name="cccd"
-                value={student.cccd ?? ""}
+                value={user.cccd ?? ""}
                 onChange={handleInputChange}
                 placeholder="CCCD"
                 className="border-gray-400 border-[1.5px] rounded-md p-2 w-full"
               />
               <input
                 name="email"
-                value={student.email}
+                value={user.email}
                 onChange={handleInputChange}
                 placeholder="Email"
                 className="border-gray-400 border-[1.5px] rounded-md p-2 w-full"
               />
               <input
                 name="phoneNumber"
-                value={student.phoneNumber ?? ""}
+                value={user.phoneNumber ?? ""}
                 onChange={handleInputChange}
                 placeholder="Số điện thoại"
                 className="border-gray-400 border-[1.5px] rounded-md p-2 w-full"
               />
               <input
                 name="sex"
-                value={student.sex ?? ""}
+                value={user.sex ?? ""}
                 onChange={handleInputChange}
                 placeholder="Giới tính"
                 className="border-gray-400 border-[1.5px] rounded-md p-2 w-full"
               />
               <input
                 name="address"
-                value={student.address ?? ""}
+                value={user.address ?? ""}
                 onChange={handleInputChange}
                 placeholder="Địa chỉ"
                 className="border-gray-400 border-[1.5px] rounded-md p-2 w-full"
               />
               <select
-                name="majorId"
-                value={student.majorId}
+                name="departmentId"
+                value={user.departmentId}
                 onChange={handleInputChange}
                 className="border-gray-400 border-[1.5px] rounded-md p-2 w-full"
               >
-                <option value="">Chọn ngành học</option>
-                {majors.map((major) => (
-                  <option key={major.id} value={major.id}>
-                    {major.name}
-                  </option>
-                ))}
-              </select>
-              <select
-                name="courseId"
-                value={student.courseId || ""}
-                onChange={handleInputChange}
-                className="border-gray-400 border-[1.5px] rounded-md p-2 w-full"
-              >
-                <option value="">Chọn khóa học</option>
-                {courses.map((course) => (
-                  <option key={course.id} value={course.id}>
-                    {course.name}
+                <option value="">Chọn khoa</option>
+                {departments.map((dpt) => (
+                  <option key={dpt.id} value={dpt.id}>
+                    {dpt.name}
                   </option>
                 ))}
               </select>
@@ -352,7 +304,7 @@ const StudentManagementPage: React.FC = () => {
                 Hủy
               </button>
               <button
-                onClick={handleAddStudent}
+                onClick={handleAddAdmin}
                 className="px-4 py-2 bg-blue-900 text-white rounded"
               >
                 Lưu
@@ -365,4 +317,4 @@ const StudentManagementPage: React.FC = () => {
   );
 };
 
-export default StudentManagementPage;
+export default AdminManagementPage;

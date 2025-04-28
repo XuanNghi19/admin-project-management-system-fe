@@ -23,7 +23,7 @@ const LoginPage: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      navigate("/admin"); // Nếu token đã tồn tại, điều hướng đến trang admin
+      navigate("/admin/dashboard"); // Nếu token đã tồn tại, điều hướng đến trang admin
     }
   }, [navigate]);
 
@@ -35,39 +35,39 @@ const LoginPage: React.FC = () => {
 
     try {
       const request: AuthenticationRequest = { idNum, password };
-      const response: ApiResponse<AuthenticationResponse | string> =
-        await login(request);
+      const response: ApiResponse<AuthenticationResponse | string> = await login(request);
 
       if (response.code === 200 && typeof response.result !== "string") {
         const authenticationResponse: AuthenticationResponse = response.result;
         const token = authenticationResponse.token;
-        const decodedToken: JwtPayload = jwtDecode<JwtPayload>(token); // Giải mã token để lấy thông tin người dùng
+        const decodedToken: JwtPayload = jwtDecode<JwtPayload>(token); // Giải mã token để lấy thông tin người dùng;
 
-        console.log(decodedToken.role);
-        console.log(Role.ADMIN);
+
 
         if (decodedToken.role !== Role.ADMIN) {
           setError("Bạn không có quyền truy cập.");
           return;
         }
 
+        console.log("token", token);
         // Lưu token và role vào localStorage
         localStorage.setItem("token", token);
 
         // Điều hướng đến trang admin
-        navigate("/admin");
-      } else if (response.code === 401) {
-        // xử lý trường hợp token hết hạn hoặc không hợp lệ
-        const introspectResponse = response.result;
-        if (isIntrospectResponse(introspectResponse)) {
-          introspectResponse.errorCode === ErrorCode.TOKEN_EXPIRED
-            ? setError("Thời gian đăng nhập đã hết.")
-            : setError("Đăng nhập không hợp lệ.");
-        }
-      } else {
-        console.log(response.result);
-        setError("Đăng nhập thất bại.");
-      }
+        navigate("/admin/dashboard");
+      } 
+      // else if (response.code === 401) {
+      //   // xử lý trường hợp token hết hạn hoặc không hợp lệ
+      //   const introspectResponse = response.result;
+      //   if (isIntrospectResponse(introspectResponse)) {
+      //     introspectResponse.errorCode === ErrorCode.TOKEN_EXPIRED
+      //       ? setError("Thời gian đăng nhập đã hết.")
+      //       : setError("Đăng nhập không hợp lệ.");
+      //   }
+      // } else {
+      //   console.log(response.result);
+      //   setError("Đăng nhập thất bại.");
+      // }
     } catch (err) {
       console.log(err);
       setError("Đăng nhập thất bại.");

@@ -16,15 +16,15 @@ export interface AuthenticationResponse {
 export interface CreateUserRequest {
   name: string;
   age: number;
-  password: string ;
-  dob: string ;
-  cccd: string;
+  password: string;
+  dob: string;
+  cccd: string | null;
   email: string;
-  phoneNumber: string;
-  sex: string;
-  address: string;
+  phoneNumber: string | null;
+  sex: string | null;
+  address: string | null;
 
-  courseId: number;
+  courseId: number | null;
   departmentId: number;
   majorId: number;
 }

@@ -1,66 +1,59 @@
-import { environment } from "../environments/environments";
 import { ApiResponse } from "../types/common.types";
-import { CreateUserRequest, UpdateUserRequest, UserListByPageResponse } from "../types/user.types";
+import {
+  CreateUserRequest,
+  UpdateUserRequest,
+  UserListByPageResponse,
+} from "../types/user.types";
 import FormData from "form-data";
-import axios from "axios";
-
-const newUrl = `${environment.apiUrl}/user_management`;
+import apiClient from "../utils/axios";
 
 export const addTeacher = async (
   requests: CreateUserRequest[]
 ): Promise<ApiResponse<boolean | string>> => {
-
-  const data: ApiResponse<any> = (await axios.post(`${newUrl}/add_teacher`, requests)).data;
-  return data;
+  const res = await apiClient.post("/user_management/add_teacher", requests);
+  return res.data;
 };
 
 export const addStudent = async (
   requests: CreateUserRequest[]
 ): Promise<ApiResponse<boolean | string>> => {
-
-  const data: ApiResponse<any> = (await axios.post(`${newUrl}/add_student`, requests)).data;
-
-  return data;
+  const res = await apiClient.post("/user_management/add_student", requests);
+  return res.data;
 };
 
 export const addAdmin = async (
-  requests: CreateUserRequest[]
+  requests: CreateUserRequest
 ): Promise<ApiResponse<boolean | string>> => {
-  
-  const data: ApiResponse<boolean | string> = (await axios.post(`${newUrl}/add_admin`, requests)).data;
-  return data;
-
+  const res = await apiClient.post("/user_management/add_admin", requests);
+  return res.data;
 };
 
 export const updateUser = async (
   request: UpdateUserRequest
 ): Promise<ApiResponse<boolean | string>> => {
-
-  const data: ApiResponse<any> = (await axios.put(`${environment.apiUrl}/update_user`, request)).data;
-  return data;
+  const res = await apiClient.put("/user_management/update_user", request);
+  return res.data;
 };
 
 export const deleteUser = async (
-  idNum: string
+  idNum_user: string
 ): Promise<ApiResponse<boolean | string>> => {
+  const res = await apiClient.delete("/user_management/delete_user", {
+    params: { idNum_user: idNum_user },
+  });
 
-  const data: ApiResponse<any> = (await axios.delete(`${environment.apiUrl}/delete_user`, {
-    params: { idNum: idNum },
-  })).data;
-
-  return data;
+  return res.data;
 };
 
 export const changePassword = async (
   idNum: string,
   newPassword: string
 ): Promise<ApiResponse<boolean | string>> => {
+  const res = await apiClient.patch("/user_management/change_password", null, {
+    params: { idNum_user: idNum, new_password: newPassword },
+  });
 
-  const data: ApiResponse<any> = (await axios.patch(`${environment.apiUrl}/change_password`, null, {
-    params: { idNum: idNum, newPassword: newPassword },
-  })).data;
-
-  return data;
+  return res.data;
 };
 
 export const uploadAvatar = async (
@@ -68,13 +61,13 @@ export const uploadAvatar = async (
   avatars: File[]
 ): Promise<ApiResponse<boolean | string>> => {
   const formData = new FormData();
-  formData.append("idNum", idNum);
-  avatars.forEach((avatar, index) => {
-    formData.append("avatar img", avatar);
+  formData.append("idNum_user", idNum);
+  avatars.forEach((avatar) => {
+    formData.append("avatar_img", avatar);
   });
 
-  const res = await axios.patch(
-    `${environment.apiUrl}/upload_avatar`,
+  const res = await apiClient.patch(
+    "/user_management/upload_avatar",
     formData,
     {
       headers: { "Content-Type": "multipart/form-data" },
@@ -85,19 +78,20 @@ export const uploadAvatar = async (
 
 export const getAllUser = async (
   role: string,
-  departmentId?: number,
-  majorId?: number,
-  courseId?: number,
-  name?: string,
+  department_id: number | null,
+  major_id: number | null,
+  course_id: number | null,
+  name: string | null,
   page: number = 1,
   limit: number = 10
 ): Promise<ApiResponse<UserListByPageResponse | string>> => {
-  const res = await axios.get(`${environment.apiUrl}/get_all_user`, {
+
+  const res = await apiClient.get("/user_management/get_all_user", {
     params: {
       role,
-      departmentId,
-      majorId,
-      courseId,
+      department_id,
+      major_id,
+      course_id,
       name,
       page,
       limit,

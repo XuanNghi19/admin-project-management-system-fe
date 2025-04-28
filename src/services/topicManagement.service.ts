@@ -1,14 +1,12 @@
-import axios from "axios";
-import { environment } from "../environments/environments";
 import { ApiResponse } from "../types/common.types";
 import { TopicDetailsResponse, TopicListByPageResponse } from "../types/topic.types";
+import apiClient from "../utils/axios";
 
-const newUrl = `${environment.apiUrl}/topic_management`;
 
 export const approveTopicGrade = async (
   idNum: string
 ): Promise<ApiResponse<number | string>> => {
-  const res = await axios.patch(`${newUrl}/approve_grade`, null, {
+  const res = await apiClient.patch("/topic_management/approve_grade", null, {
     params: { "idNum topic": idNum },
   });
   return res.data;
@@ -17,7 +15,7 @@ export const approveTopicGrade = async (
 export const deleteTopic = async (
   idNum: string
 ): Promise<ApiResponse<boolean | string>> => {
-  const res = await axios.delete(`${newUrl}/delete_topic`, {
+  const res = await apiClient.delete("/topic_management/delete_topic", {
     params: { "idNum topic": idNum },
   });
   return res.data;
@@ -30,7 +28,7 @@ export const getAllTopic = async (
   page: number,
   limit: number
 ): Promise<ApiResponse<TopicListByPageResponse | string>> => {
-  const res = await axios.get(`${newUrl}/get_all_topic`, {
+  const res = await apiClient.get("/topic_management/get_all_topic", {
     params: {
       name,
       "topic semester id": topicSemesterID,
@@ -45,7 +43,7 @@ export const getAllTopic = async (
 export const getDetailTopic = async (
   idNum: string
 ): Promise<ApiResponse<TopicDetailsResponse | string>> => {
-  const res = await axios.get(`${newUrl}/get_detail_topic`, {
+  const res = await apiClient.get("/topic_management/get_detail_topic", {
     params: { "idNum topic": idNum },
   });
   return res.data;
