@@ -298,7 +298,7 @@ const UserDetailPage: React.FC = () => {
                   Khoa:
                   <select
                     name="departmentId"
-                    value={formData.departmentId ?? user.major?.department.id}
+                    value={user.major.department.id ?? 0}
                     disabled
                     className="w-full border rounded px-3 py-1 mt-1"
                   >

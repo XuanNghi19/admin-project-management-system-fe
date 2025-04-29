@@ -1,7 +1,7 @@
 import { CRUDDepartment } from "./department.types";
 
 export interface CRUDMajor {
-  id: number;
+  id: number | null;
   name: string;
   progressPercentage: number;
   reportPercentage: number;

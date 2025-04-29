@@ -16,12 +16,14 @@ const RequireAuth = () => {
       }
 
       try {
+        console.log("checkAuth");
         const res: ApiResponse<IntrospectResponse | string> = await introspect(
           token
         );
 
         if (res.code === 200) {
           setIsValid(true);
+          console.log("res", res);
           return;
         }
       } catch (error) {

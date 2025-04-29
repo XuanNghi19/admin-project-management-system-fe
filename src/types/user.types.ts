@@ -41,8 +41,8 @@ export interface UpdateUserRequest {
   address: string;
 
   courseId: number;
-  departmentId: number;
-  majorId: number;
+  departmentId: number | null;
+  majorId: number | null;
 }
 
 export interface UserResponse {

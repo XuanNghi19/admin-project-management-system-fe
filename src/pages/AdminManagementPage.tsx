@@ -95,7 +95,7 @@ const AdminManagementPage: React.FC = () => {
   const handleAddAdmin = async () => {
     // Validate required fields
     if (!user.name) {
-      alert("Tên quảng trị viên là bắt buộc!");
+      alert("Tên quản trị viên là bắt buộc!");
       return;
     }
     if (!user.age) {
@@ -152,7 +152,7 @@ const AdminManagementPage: React.FC = () => {
           >
             <option value="">Tất cả khoa</option>
             {departments.map((dpt) => (
-              <option key={dpt.id} value={dpt.id}>
+              <option key={dpt.id} value={dpt.id ?? ""}>
                 {dpt.name}
               </option>
             ))}
@@ -289,7 +289,7 @@ const AdminManagementPage: React.FC = () => {
               >
                 <option value="">Chọn khoa</option>
                 {departments.map((dpt) => (
-                  <option key={dpt.id} value={dpt.id}>
+                  <option key={dpt.id} value={dpt.id ?? ""}>
                     {dpt.name}
                   </option>
                 ))}

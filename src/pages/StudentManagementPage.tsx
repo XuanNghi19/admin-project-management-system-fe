@@ -173,7 +173,7 @@ const StudentManagementPage: React.FC = () => {
           >
             <option value="">Tất cả ngành học</option>
             {majors.map((major) => (
-              <option key={major.id} value={major.id}>
+              <option key={major.id} value={major.id ?? ""}>
                 {major.name}
               </option>
             ))}
@@ -324,7 +324,7 @@ const StudentManagementPage: React.FC = () => {
               >
                 <option value="">Chọn ngành học</option>
                 {majors.map((major) => (
-                  <option key={major.id} value={major.id}>
+                  <option key={major.id} value={major.id ?? ""}>
                     {major.name}
                   </option>
                 ))}
