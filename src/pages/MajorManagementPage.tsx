@@ -9,6 +9,7 @@ import { getAllDepartment } from "../services/departmentManagement.service";
 import { ApiResponse } from "../types/common.types";
 import {
   addMajor,
+  deleteMajor,
   getAllMajor,
   updateMajor,
 } from "../services/majorManagement.service";
@@ -137,13 +138,33 @@ const MajorManagementPage: React.FC = () => {
       if (response.code === 200) {
         alert("Cập nhật ngành học thành công!");
         setShowEditPopup(false);
-        window.location.reload();
+        featchMajor(name, null, currentPage);
       } else {
         alert("Cập nhật ngành học thất bại!");
       }
     } catch (error) {
       console.error(error);
       alert("Lỗi khi cập nhật ngành học!");
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa ngành học này?");
+    if (confirmDelete) {
+      try {
+        const response = await deleteMajor(id);
+        if (response.code === 200 && response.result === true) {
+          alert("Ngành học đã được xóa.");
+          setShowEditPopup(false);
+          featchMajor(name, null, currentPage);
+        } else if (response.result === false) {
+          alert(response.message);
+        } else {
+          alert("Xóa ngành học thất bại!");
+        }
+      } catch (error) {
+        alert("Đã xảy ra lỗi khi xóa ngành học: " + error);
+      }
     }
   };
 
@@ -156,7 +177,7 @@ const MajorManagementPage: React.FC = () => {
         <div className="relative bg-white p-4 rounded-lg shadow mb-6 flex gap-4">
           <input
             type="text"
-            placeholder="Tên khoa"
+            placeholder="Tên ngành học"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-96 border-[0.5px] border-gray-300 rounded px-3 py-2"
@@ -353,19 +374,27 @@ const MajorManagementPage: React.FC = () => {
               </select>
             </div>
 
-            <div className="flex justify-end space-x-2 mt-4">
+            <div className="flex mt-4 relative">
               <button
-                onClick={() => setShowEditPopup(false)}
-                className="px-4 py-2 border rounded"
+                onClick={() => handleDelete(major.id as number)}
+                className="px-4 py-2 border-red-500 border text-red-500 rounded"
               >
-                Hủy
+                Xóa
               </button>
-              <button
-                onClick={handelUpdateMajor}
-                className="px-4 py-2 bg-blue-900 text-white rounded"
-              >
-                Sửa
-              </button>
+              <div className="flex space-x-2 justify-end absolute right-0">
+                <button
+                  onClick={() => setShowEditPopup(false)}
+                  className="px-4 py-2 border rounded"
+                >
+                  Hủy
+                </button>
+                <button
+                  onClick={handelUpdateMajor}
+                  className="px-4 py-2 bg-blue-900 text-white rounded"
+                >
+                  Sửa
+                </button>
+              </div>
             </div>
           </div>
         </div>

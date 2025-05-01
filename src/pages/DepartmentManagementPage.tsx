@@ -6,6 +6,7 @@ import {
 } from "../types/department.types";
 import {
   addDepartment,
+  deleteDepartment,
   getAllDepartment,
   updateDepartment,
 } from "../services/departmentManagement.service";
@@ -100,13 +101,33 @@ const DepartmentManagementPage: React.FC = () => {
       if (response.code === 200) {
         alert("Cập nhật khoa thành công!");
         setShowEditPopup(false);
-        window.location.reload();
+        featchDepartment(null, currentPage);
       } else {
         alert("Cập nhật khoa thất bại!");
       }
     } catch (error) {
       console.error(error);
       alert("Lỗi khi cập nhật khoa!");
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa khoa này?");
+    if (confirmDelete) {
+      try {
+        const response = await deleteDepartment(id);
+        if (response.code === 200 && response.result === true) {
+          alert("Khoa đã được xóa.");
+          setShowEditPopup(false);
+          featchDepartment(null, currentPage);
+        } else if (response.result === false) {
+          alert(response.message);
+        } else {
+          alert("Xóa khoa thất bại!");
+        }
+      } catch (error) {
+        alert("Đã xảy ra lỗi khi xóa khoa: " + error);
+      }
     }
   };
 
@@ -141,9 +162,7 @@ const DepartmentManagementPage: React.FC = () => {
         {/* Bảng người dùng */}
         <div className="max-w-full overflow-hidden bg-white border border-gray-300 rounded-lg shadow-lg">
           <div className="p-4">
-            <h2 className="text-xl font-semibold mb-4">
-              Danh sách khoa
-            </h2>
+            <h2 className="text-xl font-semibold mb-4">Danh sách khoa</h2>
             <table className="min-w-full bg-white text-md">
               <thead>
                 <tr className="bg-blue-50 text-left">
@@ -243,19 +262,27 @@ const DepartmentManagementPage: React.FC = () => {
               />
             </div>
 
-            <div className="flex justify-end space-x-2 mt-4">
+            <div className="flex mt-4 relative">
               <button
-                onClick={() => setShowEditPopup(false)}
-                className="px-4 py-2 border rounded"
+                onClick={() => handleDelete(department.id as number)}
+                className="px-4 py-2 border-red-500 border text-red-500 rounded"
               >
-                Hủy
+                Xóa
               </button>
-              <button
-                onClick={handelUpdateDepartment}
-                className="px-4 py-2 bg-blue-900 text-white rounded"
-              >
-                Sửa
-              </button>
+              <div className="flex space-x-2 justify-end absolute right-0">
+                <button
+                  onClick={() => setShowEditPopup(false)}
+                  className="px-4 py-2 border rounded"
+                >
+                  Hủy
+                </button>
+                <button
+                  onClick={handelUpdateDepartment}
+                  className="px-4 py-2 bg-blue-900 text-white rounded"
+                >
+                  Sửa
+                </button>
+              </div>
             </div>
           </div>
         </div>
