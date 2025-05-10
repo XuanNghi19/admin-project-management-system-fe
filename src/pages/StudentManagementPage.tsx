@@ -13,6 +13,8 @@ import Pagination from "../components/Pagination";
 import { CRUDMajor } from "../types/major.types";
 import { CRUDCourse } from "../types/course.types";
 import { searchCourse, searchMajor } from "../services/lookup.service";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const StudentManagementPage: React.FC = () => {
   const [students, setStudents] = useState<UserResponse[]>([]);
@@ -104,9 +106,9 @@ const StudentManagementPage: React.FC = () => {
     console.log("value: ", value);
     setStudent((prev) => ({
       ...prev,
-      [name]: name === "age" || name.endsWith("Id") ? Number(value) || "" : value,
+      [name]:
+        name === "age" || name.endsWith("Id") ? Number(value) || "" : value,
     }));
-
   };
 
   const handleAddStudent = async () => {
@@ -149,6 +151,33 @@ const StudentManagementPage: React.FC = () => {
       console.error(error);
       alert("Lỗi khi thêm sinh viên!");
     }
+  };
+
+  const exportToExcel = () => {
+    const excelData = students.map((user) => ({
+      MSSV: user.idNum,
+      Tên: user.name,
+      Tuổi: user.age,
+      Email: user.email,
+      "Giới tính": user.sex,
+      "Chuyên ngành": user.major?.name,
+      Khóa: user.course?.name,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "DanhSachSinhVien");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const fileData = new Blob([excelBuffer], {
+      type: "application/octet-stream",
+    });
+
+    saveAs(fileData, "DanhSachSinhVien.xlsx");
   };
 
   return (
@@ -197,8 +226,14 @@ const StudentManagementPage: React.FC = () => {
             Tìm kiếm
           </button>
           <button
+            onClick={() => exportToExcel()}
+            className="bg-blue-900 hover:bg-blue-950 text-white px-4 py-2 rounded w-fit absolute right-44"
+          >
+            Xuất excel
+          </button>
+          <button
             onClick={() => setShowPopup(true)}
-            className="bg-blue-900 hover:bg-blue-950 text-white px-4 py-2 rounded w-52 absolute right-3.5"
+            className="bg-blue-900 hover:bg-blue-950 text-white px-4 py-2 rounded w-fit absolute right-3.5"
           >
             Thêm sinh viên
           </button>

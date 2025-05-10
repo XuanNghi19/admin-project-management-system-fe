@@ -25,10 +25,13 @@ const RequireAuth = () => {
           setIsValid(true);
           console.log("res", res);
           return;
+        } else if (res.code === 401 && typeof res.result !== "string") {
+          setIsValid(false);
+          console.log(res.result);
+          localStorage.removeItem("token");
         }
       } catch (error) {
-        console.log("error");
-        console.log(token);
+        console.log("error: ", error);
         localStorage.removeItem("token");
         setIsValid(false);
       }

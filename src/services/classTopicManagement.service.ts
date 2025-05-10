@@ -35,8 +35,8 @@ export const getAllClassTopic = async (
   const res = await apiClient.get("/class_topic_management/get_all_class_topic", {
     params: {
       name: name ?? undefined,
-      "topic semester id": topicSemesterID ?? undefined,
-      "major id": majorID ?? undefined,
+      "topic_semester_id": topicSemesterID ?? undefined,
+      "major_id": majorID ?? undefined,
       page,
       limit,
     },
@@ -48,7 +48,7 @@ export const getClassTopicDetail = async (
   id: number
 ): Promise<ApiResponse<ClassTopicDetailResponse | string>> => {
   const res = await apiClient.get("/class_topic_management/get_detail_class_topic", {
-    params: { "id class topic": id },
+    params: { "id_class_topic": id },
   });
   return res.data;
 };

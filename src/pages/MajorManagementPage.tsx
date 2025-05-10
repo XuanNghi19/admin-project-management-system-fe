@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Menu from "../components/Menu";
 import { CRUDMajor, MajorListByPageResponse } from "../types/major.types";
-import {
-  CRUDDepartment,
-  DepartmentListByPageResponse,
-} from "../types/department.types";
-import { getAllDepartment } from "../services/departmentManagement.service";
+import { CRUDDepartment } from "../types/department.types";
 import { ApiResponse } from "../types/common.types";
 import {
   addMajor,
@@ -14,6 +10,7 @@ import {
   updateMajor,
 } from "../services/majorManagement.service";
 import Pagination from "../components/Pagination";
+import { searchDepartment } from "../services/lookup.service";
 
 const MajorManagementPage: React.FC = () => {
   const [departments, setDepartments] = useState<CRUDDepartment[]>([]);
@@ -41,16 +38,10 @@ const MajorManagementPage: React.FC = () => {
     },
   });
 
-  const featchDepartment = async (
-    name: string | null,
-    page: number,
-    limit = 15
-  ) => {
-    const res: ApiResponse<DepartmentListByPageResponse | string> =
-      await getAllDepartment(name, page, limit);
-
-    if (res.code === 200 && typeof res.result !== "string") {
-      setDepartments(res.result.list);
+  const featchDepartment = async (name: string | null) => {
+    const res = await searchDepartment(name);
+    if (res.code === 200 && Array.isArray(res.result)) {
+      setDepartments(res.result);
     }
   };
 
@@ -117,7 +108,7 @@ const MajorManagementPage: React.FC = () => {
   };
 
   useEffect(() => {
-    featchDepartment(null, currentPage);
+    featchDepartment(null);
     featchMajor(name, null, 0);
   }, [currentPage]);
 
@@ -149,7 +140,9 @@ const MajorManagementPage: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa ngành học này?");
+    const confirmDelete = window.confirm(
+      "Bạn có chắc chắn muốn xóa ngành học này?"
+    );
     if (confirmDelete) {
       try {
         const response = await deleteMajor(id);

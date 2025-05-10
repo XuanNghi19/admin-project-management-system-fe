@@ -152,7 +152,7 @@ const InstructorManagementPage: React.FC = () => {
           >
             <option value="">Tất cả khoa</option>
             {departments.map((dpt) => (
-              <option key={dpt.id} value={dpt.id}>
+              <option key={dpt.id} value={dpt.id ?? ""}>
                 {dpt.name}
               </option>
             ))}
@@ -289,7 +289,7 @@ const InstructorManagementPage: React.FC = () => {
               >
                 <option value="">Chọn khoa</option>
                 {departments.map((dpt) => (
-                  <option key={dpt.id} value={dpt.id}>
+                  <option key={dpt.id} value={dpt.id ?? ""}>
                     {dpt.name}
                   </option>
                 ))}

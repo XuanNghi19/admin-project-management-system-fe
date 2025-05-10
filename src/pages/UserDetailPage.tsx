@@ -80,6 +80,7 @@ const UserDetailPage: React.FC = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [loadingAvartar, setLoadingAvartar] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleChange = (
@@ -101,7 +102,6 @@ const UserDetailPage: React.FC = () => {
       const response = await updateUser(formData);
       if (response.code === 200) {
         alert("Cập nhật thành công!");
-        navigate(-1); // Quay về trang trước
       } else {
         alert("Cập nhật thất bại!");
       }
@@ -142,6 +142,8 @@ const UserDetailPage: React.FC = () => {
   const handleUploadAvatar = async () => {
     if (!selectedAvatar) return;
 
+    setLoadingAvartar(true);
+
     try {
       const response = await uploadAvatar(formData.idNum, [selectedAvatar]);
       if (response.code === 200) {
@@ -152,6 +154,8 @@ const UserDetailPage: React.FC = () => {
     } catch (error) {
       console.error(error);
       alert("Lỗi khi cập nhật ảnh!");
+    }  finally {
+      setLoadingAvartar(false);
     }
   };
 
@@ -203,8 +207,9 @@ const UserDetailPage: React.FC = () => {
             type="button"
             onClick={handleUploadAvatar}
             className="absolute right-0 px-4 py-2 bg-blue-900 text-white rounded hover:bg-blue-950"
+            disabled={loadingAvartar}
           >
-            Cập nhật Avatar
+            {loadingAvartar ? "Đang cập nhật ảnh ..." : "Cập nhật ảnh đại diện"}
           </button>
         </div>
 

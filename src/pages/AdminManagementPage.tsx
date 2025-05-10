@@ -87,9 +87,9 @@ const AdminManagementPage: React.FC = () => {
     const { name, value } = e.target;
     setUser((prev) => ({
       ...prev,
-      [name]: name === "age" || name.endsWith("Id") ? Number(value) || "" : value,
+      [name]:
+        name === "age" || name.endsWith("Id") ? Number(value) || "" : value,
     }));
-
   };
 
   const handleAddAdmin = async () => {
@@ -134,6 +134,7 @@ const AdminManagementPage: React.FC = () => {
     <div className="bg-gray-50 w-screen h-screen flex relative overflow-hidden">
       <Menu />
       <div className="flex-1 p-6 ml-[40px] mr-[30px] overflow-auto scrollbar-hide">
+        {/* Tiêu đề trang */}
         <h1 className="text-2xl font-semibold mb-6">Quản lý quản trị viên</h1>
 
         {/* Thanh tìm kiếm */}
@@ -174,7 +175,9 @@ const AdminManagementPage: React.FC = () => {
         {/* Bảng người dùng */}
         <div className="max-w-full overflow-hidden bg-white border border-gray-300 rounded-lg shadow-lg">
           <div className="p-4">
-            <h2 className="text-xl font-semibold mb-4">Danh sách quản trị viên</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              Danh sách quản trị viên
+            </h2>
             <table className="min-w-full bg-white text-md">
               <thead>
                 <tr className="bg-blue-50 text-left">

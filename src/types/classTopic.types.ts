@@ -2,7 +2,6 @@ import { CRUDTopicSemester } from "./topicSemester.types";
 import { CRUDMajor } from "./major.types";
 import { UserResponse } from "./user.types";
 import { CUDStudentTopicRequest, StudentTopicResponse } from "./studentTopic.types";
-import { ActionTypes } from "./enum.types";
 
 export interface ClassTopicDetailResponse {
   id: number;
