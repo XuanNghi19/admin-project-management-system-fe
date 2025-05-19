@@ -342,7 +342,7 @@ const CreateClassTopicPage: React.FC = () => {
                 }
                 isSearchable
                 isClearable
-                placeholder="Tìm kiếm chuyên ngành tên"
+                placeholder="Tìm kiếm chuyên ngành theo tên"
                 styles={styleSelect}
               />
             </div>

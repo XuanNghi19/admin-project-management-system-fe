@@ -17,6 +17,8 @@ import CouncilManagementPage from "../pages/CouncilManagementPage";
 import CreateClassTopicPage from "../pages/CreateTopicClassroomPage";
 import ClassTopicDetailPage from "../pages/ClassTopicDetailPage";
 import TopicDetailPage from "../pages/TopicDetail";
+import CreateCouncilPage from "../pages/CreateCouncilPage";
+import CouncilDetail from "../pages/CouncilDetail";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -48,7 +50,10 @@ const AppRoutes: React.FC = () => {
         <Route path="/admin/topic_management" element={<TopicManagementPage />}/>
         <Route path="/admin/topic_detail/:idNum" element={<TopicDetailPage />}/>
 
+        {/* Quản lý hội đồng */}
         <Route path="/admin/council_management" element={<CouncilManagementPage />}/>
+        <Route path="/admin/create_council" element={<CreateCouncilPage />}/>
+        <Route path="/admin/council_detail/:id" element={<CouncilDetail />}/>
       </Route>
 
       {/* 404 fallback */}
