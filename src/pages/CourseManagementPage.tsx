@@ -204,7 +204,7 @@ const CourseManagementPage: React.FC = () => {
         {/* Bảng người dùng */}
         <div className="max-w-full overflow-hidden bg-white border border-gray-300 rounded-lg shadow-lg">
           <div className="p-4">
-            <h2 className="text-xl font-semibold mb-4">Danh sách ngành học</h2>
+            <h2 className="text-xl font-semibold mb-4">Danh sách khóa học</h2>
             <table className="min-w-full bg-white text-md">
               <thead>
                 <tr className="bg-blue-50 text-left">

@@ -10,8 +10,8 @@ export enum ErrorCode {
 }
 
 export enum MembershipPosition {
-  Leader = "Leader",
-  Member = "Member",
+  LEADER = "LEADER",
+  MEMBER = "MEMBER",
 }
 
 export enum ProjectStage {
@@ -24,6 +24,17 @@ export enum ProjectStage {
   TESTING = "TESTING",               // Kiểm tra và hoàn thiện
   DEFENSE = "DEFENSE"              // Bảo vệ và đánh giá
 }
+
+export const ProjectStageOptions = [
+  { value: ProjectStage.PENDING, label: "Đang chờ duyệt" },
+  { value: ProjectStage.IDEATION, label: "Lên ý tưởng và xác định đề tài" },
+  { value: ProjectStage.PLANNING, label: "Lập kế hoạch và phân công công việc" },
+  { value: ProjectStage.REQUIREMENT_ANALYSIS, label: "Nghiên cứu và phân tích yêu cầu" },
+  { value: ProjectStage.DESIGN, label: "Thiết kế và xây dựng" },
+  { value: ProjectStage.DEVELOPMENT, label: "Triển khai và phát triển" },
+  { value: ProjectStage.TESTING, label: "Kiểm tra và hoàn thiện" },
+  { value: ProjectStage.DEFENSE, label: "Bảo vệ và đánh giá" },
+];
 
 export enum Role {
   STUDENT = "STUDENT",

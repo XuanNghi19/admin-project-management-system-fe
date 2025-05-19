@@ -65,19 +65,25 @@ const TopicClassroomManagementPage: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    const res: ApiResponse<boolean | string> = await deleteClassTopic(id);
-    if (res.code === 200 && res.result === true) {
-      alert("Xóa lớp học thành công");
-      featchClassTopics(name, null, null, 0);
-    } else {
-      alert("Xóa lớp học thất bại");
+    const confirmDelete = window.confirm(
+      "Bạn có chắc chắn muốn xóa lớp học đồ án này?"
+    );
+
+    if (confirmDelete) {
+      const res: ApiResponse<boolean | string> = await deleteClassTopic(id);
+      if (res.code === 200 && res.result === true) {
+        alert("Xóa lớp học thành công");
+        featchClassTopics(null, null, null, 0);
+      } else {
+        alert("Xóa lớp học thất bại");
+      }
     }
   };
 
   useEffect(() => {
     featchTopicSemesters(null);
     featchMajor(null);
-    featchClassTopics(name, null, null, 0);
+    featchClassTopics(null, null, null, 0);
   }, [currentPage]);
 
   return (
@@ -140,7 +146,9 @@ const TopicClassroomManagementPage: React.FC = () => {
         {/* Bảng người dùng */}
         <div className="max-w-full overflow-hidden bg-white border border-gray-300 rounded-lg shadow-lg">
           <div className="p-4">
-            <h2 className="text-xl font-semibold mb-4">Danh sách ngành học</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              Danh sách lớp học đồ án
+            </h2>
             <table className="min-w-full bg-white text-md">
               <thead>
                 <tr className="bg-blue-50 text-left">

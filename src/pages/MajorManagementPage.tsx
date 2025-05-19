@@ -197,7 +197,7 @@ const MajorManagementPage: React.FC = () => {
             onClick={() => setShowAddPopup(true)}
             className="bg-blue-900 hover:bg-blue-950 text-white px-4 py-2 rounded w-52 absolute right-3.5"
           >
-            Thêm khoa mới
+            Thêm ngành học mới
           </button>
         </div>
 
@@ -315,7 +315,7 @@ const MajorManagementPage: React.FC = () => {
       {showEditPopup && (
         <div className="fixed inset-0 bg-gray-800/20 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-[500px] space-y-4">
-            <h2 className="text-xl font-bold mb-4">Thêm khoa mới</h2>
+            <h2 className="text-xl font-bold mb-4">Sửa ngành học</h2>
 
             <div className="space-y-4">
               <input

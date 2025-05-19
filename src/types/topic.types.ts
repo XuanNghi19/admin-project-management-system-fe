@@ -47,12 +47,10 @@ export interface TopicListByPageResponse {
 
 export interface TopicResponse {
   idNum: string;
-  startTime: string; // ISO 8601 date-time string
-  endTime: string; // ISO 8601 date-time string
   name: string;
-  startSubmissionDate: string; // ISO 8601 date-time string
-  endSubmissionDate: string; // ISO 8601 date-time string
+  major: CRUDMajor;
   projectStage: ProjectStage;
+  topicSemester: CRUDTopicSemester;
   grade: GradeResponse;
 }
 

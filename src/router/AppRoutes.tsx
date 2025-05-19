@@ -16,6 +16,7 @@ import TopicManagementPage from "../pages/TopicManagementPage";
 import CouncilManagementPage from "../pages/CouncilManagementPage";
 import CreateClassTopicPage from "../pages/CreateTopicClassroomPage";
 import ClassTopicDetailPage from "../pages/ClassTopicDetailPage";
+import TopicDetailPage from "../pages/TopicDetail";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -43,7 +44,10 @@ const AppRoutes: React.FC = () => {
         <Route path="/admin/create_class_topic" element={<CreateClassTopicPage />}/>
         <Route path="/admin/class_topic_detail/:id" element={<ClassTopicDetailPage />}/>
 
+        {/* Quản lý đồ án */}
         <Route path="/admin/topic_management" element={<TopicManagementPage />}/>
+        <Route path="/admin/topic_detail/:idNum" element={<TopicDetailPage />}/>
+
         <Route path="/admin/council_management" element={<CouncilManagementPage />}/>
       </Route>
 

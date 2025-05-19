@@ -1,4 +1,5 @@
 import { ApiResponse } from "../types/common.types";
+import { ProjectStage } from "../types/enum.types";
 import { TopicDetailsResponse, TopicListByPageResponse } from "../types/topic.types";
 import apiClient from "../utils/axios";
 
@@ -25,14 +26,16 @@ export const getAllTopic = async (
   name: string | null,
   topicSemesterID: number | null,
   majorID: number | null,
+  projectStage: ProjectStage | null,
   page: number,
   limit: number
 ): Promise<ApiResponse<TopicListByPageResponse | string>> => {
   const res = await apiClient.get("/topic_management/get_all_topic", {
     params: {
       name,
-      "topic semester id": topicSemesterID,
-      "major id": majorID,
+      "topic_semester_id": topicSemesterID,
+      "major_id": majorID,
+      "project_stage": projectStage,
       page,
       limit,
     },

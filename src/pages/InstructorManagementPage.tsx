@@ -221,14 +221,14 @@ const InstructorManagementPage: React.FC = () => {
       {showPopup && (
         <div className="fixed inset-0 bg-gray-800/20 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-[500px] space-y-4">
-            <h2 className="text-xl font-bold mb-4">Thêm sinh viên mới</h2>
+            <h2 className="text-xl font-bold mb-4">Thêm giảng viên mới</h2>
 
             <div className="space-y-4">
               <input
                 name="name"
                 value={user.name}
                 onChange={handleInputChange}
-                placeholder="Tên sinh viên"
+                placeholder="Tên giảng viên"
                 className="border-gray-400 border-[1.5px] rounded-md p-2 w-full"
               />
               <input

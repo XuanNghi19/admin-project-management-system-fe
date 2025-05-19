@@ -11,7 +11,7 @@ export interface TeamMemberResponse {
 
 export interface TeamResponse {
   id: number;
-  teacher: UserResponse;
+  teacher_name: string;
   groupName: string;
   topicSemester: CRUDTopicSemester;
   major: CRUDMajor;
