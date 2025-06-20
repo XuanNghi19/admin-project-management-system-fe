@@ -69,7 +69,7 @@ const TopicDetailPage: React.FC = () => {
 
   useEffect(() => {
     featchDetailTopic(String(idNum));
-  }, []);
+  }, [topicDetail]);
 
   const back = () => {
     navigate("/admin/topic_management");
@@ -87,12 +87,19 @@ const TopicDetailPage: React.FC = () => {
         <div className="items-center justify-center flex w-screen">
           <h1 className="text-2xl font-semibold">Chi tiết đồ án</h1>
         </div>
-        <button
-          onClick={() => approveGrade()}
-          className="bg-blue-900 hover:bg-blue-950 text-white px-4 py-2 rounded w-fit absolute end-0"
-        >
-          Duyệt điểm
-        </button>
+        {topicDetail?.grade.finalScore === null && (
+          <button
+            onClick={() => approveGrade()}
+            className="bg-blue-900 hover:bg-blue-950 text-white px-4 py-2 rounded w-fit absolute end-0"
+          >
+            Duyệt điểm
+          </button>
+        )}
+        {topicDetail?.grade.finalScore !== null && (
+          <div className="bg-blue-900 hover:bg-blue-950 text-white px-4 py-2 rounded w-fit absolute end-0">
+            Đồ án đã được duyệt điểm
+          </div>
+        )}
       </div>
       <TopicHeader topic={topicDetail ?? null} />
 

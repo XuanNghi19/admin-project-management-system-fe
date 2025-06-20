@@ -7,6 +7,7 @@ import { CRUDBoardMember } from "../types/boardMember.types";
 import {
   searchDepartment,
   searchInstructor,
+  searchTopic,
   searchTopicSemester,
 } from "../services/lookup.service";
 import Select from "react-select";
@@ -15,6 +16,7 @@ import { CRUDDefenseSchedule } from "../types/defenseSchedule.types";
 import { format } from "date-fns";
 import { TopicResponse } from "../types/topic.types";
 import { ActionTypes, ProjectStage } from "../types/enum.types";
+import { addCouncil } from "../services/councilManagement.service";
 
 const CreateCouncilPage: React.FC = () => {
   const navigate = useNavigate();
@@ -54,172 +56,9 @@ const CreateCouncilPage: React.FC = () => {
   const [topicSemesterID, setTopicSemesterID] = useState<number | null>(null);
   const [departmentID, setDepartmentID] = useState<number | null>(null);
 
-  const [boardMemberList, setBoarMemberList] = useState<CRUDBoardMember[]>([
-    {
-      id: 1,
-      position: "Chủ tịch hội đồng",
-      action: ActionTypes.CREATE,
-      user: {
-        idNum: "GV001",
-        name: "Nguyễn Văn A",
-        age: 45,
-        dob: "1980-05-15",
-        cccd: "123456789012",
-        email: "nguyenvana@university.edu.vn",
-        phoneNumber: "0123456789",
-        sex: "Nam",
-        avatarUrl: "/avatars/gv001.jpg",
-        address: "123 Nguyễn Trãi, Hà Nội",
-        course: {
-          id: 1,
-          name: "Khoa học máy tính K2020",
-          startTime: "2020-09-01T00:00:00",
-          endTime: "2024-06-30T00:00:00",
-        },
-        department: {
-          id: 1,
-          name: "Khoa Công nghệ thông tin",
-          description: "Chuyên ngành CNTT",
-        },
-        major: {
-          id: 1,
-          name: "Khoa học máy tính",
-          progressPercentage: 20,
-          reportPercentage: 30,
-          defensePercentage: 40,
-          reviewPercentage: 10,
-          department: {
-            id: 1,
-            name: "Khoa Công nghệ thông tin",
-            description: "Chuyên ngành CNTT",
-          },
-        },
-      },
-    },
-    {
-      id: 2,
-      position: "Phản biện",
-      action: ActionTypes.UPDATE,
-      user: {
-        idNum: "GV002",
-        name: "Trần Thị B",
-        age: 40,
-        dob: "1983-02-20",
-        cccd: "987654321098",
-        email: "tranthib@university.edu.vn",
-        phoneNumber: "0987654321",
-        sex: "Nữ",
-        avatarUrl: "/avatars/gv002.jpg",
-        address: "456 Lê Lợi, TP.HCM",
-        course: {
-          id: 2,
-          name: "Hệ thống thông tin K2021",
-          startTime: "2021-09-01T00:00:00",
-          endTime: "2025-06-30T00:00:00",
-        },
-        department: {
-          id: 2,
-          name: "Khoa Hệ thống thông tin",
-          description: "Chuyên ngành HTTT",
-        },
-        major: {
-          id: 2,
-          name: "Hệ thống thông tin",
-          progressPercentage: 25,
-          reportPercentage: 25,
-          defensePercentage: 40,
-          reviewPercentage: 10,
-          department: {
-            id: 2,
-            name: "Khoa Hệ thống thông tin",
-            description: "Chuyên ngành HTTT",
-          },
-        },
-      },
-    },
-  ]);
-  const [defenseScheduleList, setDefenseScheduleList] = useState<
-    CRUDDefenseSchedule[]
-  >([
-    {
-      id: 1,
-      action: ActionTypes.CREATE,
-      startTime: "2025-06-15T08:00:00",
-      endTime: "2025-06-15T10:00:00",
-      note: "Lịch bảo vệ sáng thứ 2",
-      topic: {
-        idNum: "DA001",
-        name: "Ứng dụng AI trong phân tích cảm xúc",
-        projectStage: ProjectStage.DEFENSE,
-        topicSemester: {
-          id: 1,
-          name: "Học kỳ II - Năm học 2024-2025",
-          startTime: "2025-01-01T00:00:00",
-          endTime: "2025-06-30T00:00:00",
-        },
-        major: {
-          id: 1,
-          name: "Khoa học máy tính",
-          progressPercentage: 20,
-          reportPercentage: 30,
-          defensePercentage: 40,
-          reviewPercentage: 10,
-          department: {
-            id: 1,
-            name: "Khoa Công nghệ thông tin",
-            description: "Chuyên ngành CNTT",
-          },
-        },
-        grade: {
-          id: 1,
-          progressScore: 9.0,
-          reportScore: 8.5,
-          reviewScore: 9.2,
-          defenseScore: 9.5,
-          finalScore: 9.1,
-        },
-      },
-    },
-    {
-      id: 2,
-      action: ActionTypes.UPDATE,
-      startTime: "2025-06-16T13:00:00",
-      endTime: "2025-06-16T15:00:00",
-      note: "Lịch buổi chiều",
-      topic: {
-        idNum: "DA002",
-        name: "Hệ thống quản lý điểm rèn luyện",
-        projectStage: ProjectStage.TESTING,
-        topicSemester: {
-          id: 1,
-          name: "Học kỳ II - Năm học 2024-2025",
-          startTime: "2025-01-01T00:00:00",
-          endTime: "2025-06-30T00:00:00",
-        },
-        major: {
-          id: 2,
-          name: "Hệ thống thông tin",
-          progressPercentage: 25,
-          reportPercentage: 25,
-          defensePercentage: 40,
-          reviewPercentage: 10,
-          department: {
-            id: 2,
-            name: "Khoa Hệ thống thông tin",
-            description: "Chuyên ngành HTTT",
-          },
-        },
-        grade: {
-          id: 2,
-          progressScore: 8.0,
-          reportScore: 7.5,
-          reviewScore: 8.2,
-          defenseScore: 8.8,
-          finalScore: 8.1,
-        },
-      },
-    },
-  ]);
+  const [boardMemberList, setBoarMemberList] = useState<CRUDBoardMember[]>();
+  const [defenseScheduleList, setDefenseScheduleList] =
+    useState<CRUDDefenseSchedule[]>();
 
   const [showAddBoardMember, setShowAddBoardMember] = useState(false);
   const [showAddDefenseSchedule, setShowAddDefenseSchedule] = useState(false);
@@ -236,50 +75,46 @@ const CreateCouncilPage: React.FC = () => {
       !startTime ||
       !endTime ||
       topicSemesterID === null ||
-      departmentID === null
+      departmentID === null ||
+      !councilName ||
+      !location || 
+      !fileUrl ||
+      !boardMemberList
     ) {
       alert("Vui lòng điền đầy đủ thông tin.");
       return;
     }
+    if (new Date(startTime) >= new Date(endTime)) {
+      alert("Thời gian bắt đầu phải trước thời gian kết thúc.");
+      return;
+    }
 
-    // let studentsAddBuffer = students.map((student) => {
-    //   const studentAdd: CUDStudentTopicRequest = {
-    //     id: 0,
-    //     studentIdNum: student.idNum,
-    //     status: false,
-    //     action: ActionTypes.CREATE,
-    //   };
-    //   return studentAdd;
-    // });
+    const newCreateCouncilRequest = {
+      name: councilName,
+      fileUrl: "https://firebasestorage.googleapis.com/v0/b/fakeslink-89c91.appspot.com/o/project_management%2FNgh%E1%BB%8B%20%C4%91%E1%BB%8Bnh%20th%C3%A0nh%20l%E1%BA%ADp%20h%E1%BB%99i%20%C4%91%E1%BB%93ng%20s%E1%BB%91%20489.pdf?alt=media",
+      location: location,
+      startTime: startTime,
+      endTime: endTime,
+      topicSemesterID: topicSemesterID,
+      departmentID: departmentID,
+      scheduleRequests: defenseScheduleList || [],
+      boardMemberList: boardMemberList || [],
+    };
 
-    // studentsAdd = [...studentsAddBuffer];
-    // console.log("students", students);
-    // console.log("studentsAdd", studentsAdd);
+    try {
+      // Call the API to create the council
+      const res = await addCouncil(newCreateCouncilRequest);
+      if (res.code === 200) {
+        alert("Tạo hội đồng thành công");
+        navigate("/admin/council_management");
+      } else {
+        alert("Tạo hội đồng thất bại: " + res.message);
+      }
+    } catch (error) {
+      console.error("Error creating council:", error);
+      alert("Đã xảy ra lỗi khi tạo hội đồng. Vui lòng thử lại sau.");
+    }
 
-    // const request: CreateClassTopicRequest = {
-    //   className,
-    //   teacherIdNum,
-    //   topicSemesterID,
-    //   majorID,
-    //   startRegistrationTime: new Date(startTime).toISOString(),
-    //   endRegistrationTime: new Date(endTime).toISOString(),
-    //   studentTopicList: studentsAdd,
-    // };
-
-    // try {
-    //   const res = await addClassTopic(request);
-    //   if (res.code === 200 && typeof res.result !== "string") {
-    //     alert("Thêm lớp học đồ án thành công");
-    //     back();
-    //   } else if (res.code === 400 && typeof res.result === "string") {
-    //     const parts = res.result.split(": ");
-    //     const message = parts.slice(1).join(": ");
-    //     alert(`Thêm thất bại: ${message}`);
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   alert("Đã xảy ra lỗi khi thêm lớp học.");
-    // }
   };
 
   const fetchInstructors = async (name: string | null) => {
@@ -287,6 +122,14 @@ const CreateCouncilPage: React.FC = () => {
     console.log("res", res.result);
     if (res.code === 200 && Array.isArray(res.result)) {
       setInstructorList(res.result);
+    }
+  };
+
+  const fetchTopics = async (name: string | null) => {
+    const res = await searchTopic(name);
+    if (res.code === 200 && Array.isArray(res.result)) {
+      setTopicList(res.result);
+      console.log("TopicList", res.result);
     }
   };
 
@@ -306,10 +149,48 @@ const CreateCouncilPage: React.FC = () => {
     }
   };
 
-  const featchTopicList = async () => {};
+  const handleAddBoardMember = async () => {
+    if (!boardMember || !position) {
+      alert("Vui lòng chọn giảng viên và nhập chức vụ.");
+      return;
+    }
+
+    const newBoardMember: CRUDBoardMember = {
+      id: 0,
+      user: boardMember,
+      position: position,
+      action: ActionTypes.CREATE,
+    };
+
+    setBoarMemberList((prev) => [...(prev || []), newBoardMember]);
+    setShowAddBoardMember(false);
+    setBoardMember(undefined);
+    setPosition("");
+  };
+
+  const handleAddDefenseSchedule = async () => {
+    if (!topic || !startTimeTopic || !endTimeTopic) {
+      alert("Vui lòng chọn đồ án và nhập thời gian bắt đầu, kết thúc.");
+      return;
+    }
+    const newDefenseSchedule: CRUDDefenseSchedule = {
+      id: 0,
+      topic: topic,
+      startTime: startTimeTopic,
+      endTime: endTimeTopic,
+      action: ActionTypes.CREATE,
+      note: "",
+    };
+    setDefenseScheduleList((prev) => [...(prev || []), newDefenseSchedule]);
+    setShowAddDefenseSchedule(false);
+    setTopic(undefined);
+    setStartTimeTopic("");
+    setEndTimeTopic("");
+  }
 
   useEffect(() => {
     fetchInstructors(null);
+    fetchTopics(null);
     fetchTopicSemesters(null);
     fetchDepartments(null);
   }, []);
@@ -329,13 +210,13 @@ const CreateCouncilPage: React.FC = () => {
             Thoát
           </button>
           <div className="flex w-screen justify-center">
-            <h1 className="text-2xl font-semibold">Chi tiết hội đồng</h1>
+            <h1 className="text-2xl font-semibold">Tạo hội đồng</h1>
           </div>
           <button
-            onClick={() => back()}
+            onClick={() => handleAddCouncil()}
             className="bg-blue-900 hover:bg-blue-950 text-white px-4 py-2 rounded w-fit absolute end-0"
           >
-            Cập nhật hội đồng
+            Tạo mới hội đồng
           </button>
         </div>
         <div className="bg-white rounded-lg h-fit p-8 mb-4">
@@ -474,7 +355,7 @@ const CreateCouncilPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {boardMemberList.map((boardMember, idx) => (
+                {boardMemberList?.map((boardMember, idx) => (
                   <tr key={idx} className="cursor-pointer border-t">
                     <td className="py-2 px-4">{idx + 1}</td>
                     <td className="py-2 px-4">{boardMember.user.idNum}</td>
@@ -482,8 +363,11 @@ const CreateCouncilPage: React.FC = () => {
                     <td className="py-2 px-4">{boardMember.position}</td>
                     <td className="py-2 px-4">
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onClick={() => {
+                          const updatedBoardMember = boardMemberList.filter(
+                            (member) => member.user.idNum !== boardMember.user.idNum
+                          );
+                          setBoarMemberList(updatedBoardMember);
                         }}
                         className="border-blue-900 border-2 hover:bg-red-700 hover:text-white px-4 py-2 rounded"
                       >
@@ -518,7 +402,7 @@ const CreateCouncilPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {defenseScheduleList.map((defenseSchedule, idx) => (
+                {defenseScheduleList?.map((defenseSchedule, idx) => (
                   <tr key={idx} className="cursor-pointer border-t">
                     <td className="py-2 px-4">{idx + 1}</td>
                     <td className="py-2 px-4">
@@ -534,8 +418,11 @@ const CreateCouncilPage: React.FC = () => {
                     </td>
                     <td className="py-2 px-4">
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onClick={() => {
+                          const updateDefenseScheduleList = defenseScheduleList.filter(
+                            (ds) => ds.topic.idNum !== defenseSchedule.topic.idNum
+                          );
+                          setDefenseScheduleList(updateDefenseScheduleList);
                         }}
                         className="border-blue-900 border-2 hover:bg-red-700 hover:text-white px-4 py-2 rounded"
                       >
@@ -601,7 +488,7 @@ const CreateCouncilPage: React.FC = () => {
                 Hủy
               </button>
               <button
-                onClick={() => setShowAddBoardMember(false)}
+                onClick={() => handleAddBoardMember()}
                 className="px-4 py-2 rounded bg-blue-900 hover:bg-blue-950 text-white"
               >
                 Lưu
@@ -641,8 +528,8 @@ const CreateCouncilPage: React.FC = () => {
                 </label>
                 <input
                   type="datetime-local"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
+                  value={startTimeTopic}
+                  onChange={(e) => setStartTimeTopic(e.target.value)}
                   className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -653,8 +540,8 @@ const CreateCouncilPage: React.FC = () => {
                 </label>
                 <input
                   type="datetime-local"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
+                  value={endTimeTopic}
+                  onChange={(e) => setEndTimeTopic(e.target.value)}
                   className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -668,7 +555,7 @@ const CreateCouncilPage: React.FC = () => {
                 Hủy
               </button>
               <button
-                onClick={() => setShowAddDefenseSchedule(false)}
+                onClick={() => handleAddDefenseSchedule()}
                 className="px-4 py-2 rounded bg-blue-900 hover:bg-blue-950 text-white"
               >
                 Lưu

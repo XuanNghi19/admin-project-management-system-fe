@@ -67,6 +67,7 @@ const CouncilManagementPage: React.FC = () => {
         limit
       );
     if (res.code === 200 && typeof res.result !== "string") {
+      console.log("list: ", res.result.list);
       setCouncilList(res.result.list);
       setTotalPages(res.result.totalPage);
     }
@@ -95,7 +96,7 @@ const CouncilManagementPage: React.FC = () => {
     featchTopicSemesters(null);
     featchMajor(null);
     featchCouncils(null, null, null, null, null, 0);
-  });
+  }, []);
 
   return (
     <div className="bg-gray-50 w-screen h-screen flex relative overflow-hidden">

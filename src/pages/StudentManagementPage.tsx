@@ -68,8 +68,6 @@ const StudentManagementPage: React.FC = () => {
     courseId?: string,
     name?: string
   ) => {
-    console.log(majorId);
-    console.log(courseId);
     const res: ApiResponse<UserListByPageResponse | string> = await getAllUser(
       Role.STUDENT,
       null,
@@ -81,7 +79,6 @@ const StudentManagementPage: React.FC = () => {
     );
 
     if (res.code === 200 && typeof res.result !== "string") {
-      console.log(res.result.list);
       setStudents(res.result.list);
       setTotalPages(res.result.totalPage);
     }
@@ -102,8 +99,6 @@ const StudentManagementPage: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    console.log("name: ", name);
-    console.log("value: ", value);
     setStudent((prev) => ({
       ...prev,
       [name]:

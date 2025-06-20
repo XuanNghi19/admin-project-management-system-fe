@@ -100,9 +100,6 @@ const ClassTopicDetailPage: React.FC = () => {
       ...addStudentTopics,
       ...studentsChangeBuffer,
     ];
-    console.log("students: ", students);
-    console.log("deleteStudentTopics: ", deleteStudentTopics);
-    console.log("studentsChange: ", studentsChange);
 
     const request: UpdateClassTopicRequest = {
       id: Number(id),

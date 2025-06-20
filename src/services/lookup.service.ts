@@ -5,6 +5,7 @@ import { CRUDTopicSemester } from "../types/topicSemester.types";
 import { CRUDCourse } from "../types/course.types";
 import apiClient from "../utils/axios";
 import { UserResponse } from "../types/user.types";
+import { TopicResponse } from "../types/topic.types";
 
 export const searchDepartment = async (
   name: string | null
@@ -66,6 +67,15 @@ export const searchSingleStudent = async (
 ): Promise<ApiResponse<UserResponse | string>> => {
   const res = await apiClient.get("/lookup/search_single_student", {
     params: { idNum },
+  });
+  return res.data;
+};
+
+export const searchTopic = async (
+  name: string | null
+): Promise<ApiResponse<TopicResponse[] | string>> => {
+  const res = await apiClient.get("/lookup/search_topic", {
+    params: { name },
   });
   return res.data;
 };

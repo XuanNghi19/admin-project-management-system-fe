@@ -7,10 +7,11 @@ export interface CouncilDetailResponse {
   id: number;
   name: string;
   location: string;
-  startTime: string; // ISO 8601 date-time string
+  startTime: string;
   endTime: string;
   topicSemester: CRUDTopicSemester;
   department: CRUDDepartment;
+  fileUrl: string;
   defenseScheduleList: CRUDDefenseSchedule[];
   boardMemberList: CRUDBoardMember[];
 }
